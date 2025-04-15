@@ -10,7 +10,8 @@ use TwitchAnalytics\Domain\Exceptions\UserNotFoundException;
 class UserAccountService
 {
     public function __construct(
-        private UserRepositoryInterface $userRepository
+        private UserRepositoryInterface $userRepository,
+        private TimeProvider $timeProvider
     ) {
     }
 
@@ -34,7 +35,7 @@ class UserAccountService
     private function calculateDaysSinceCreation(string $createdAt): int
     {
         $createdDate = new \DateTime($createdAt);
-        $now = new \DateTime();
+        $now = $this->timeProvider->now();
         return (int) $createdDate->diff($now)->days;
     }
 }
